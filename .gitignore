@@ -141,11 +141,10 @@ sbatch_jobs/
 hzeng/
 data/
 output/
+checkpoints/
 
 # Other custom ignores
 *.DS_Store
 *.log
 *.tmp
 *.swp
-
-analysis/

@@ -1,33 +1,4 @@
 #!/bin/bash
-#SBATCH -A bcgk-delta-gpu
-#SBATCH --job-name="CL sparse fine-tuning on llama 3.2 1B"
-#SBATCH --output="./output/finetune-sparse/lorapattern-1B-%j.out"
-#SBATCH --error="./output/finetune-sparse/lorapattern-1B-%j.err"
-#SBATCH --partition=gpuA100x4
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=32
-#SBATCH --no-requeue
-#SBATCH --gpus=2
-#SBATCH --mem=104G
-#SBATCH -t 10:00:00
-
-module purge
-module load nvhpc
-
-# load conda env variables
-# loading the profile of user zwang48 to inject require functions
-__conda_setup="$('/u/zwang48/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/u/zwang48/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/u/zwang48/miniconda3/profile.d/conda.sh"
-    else
-        export PATH="/u/zwang48/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-conda activate sclr
 
 extract_task_weights() {
     local task_weights=$1
@@ -44,10 +15,10 @@ extract_task_weights() {
 }
 
 # train 
-corpus_path=/projects/bcgk/zwang48/sclr/msmarco-full/collection.tsv
-train_path=/projects/bcgk/zwang48/sclr/msmarco-full/train.formatted.jsonl
+corpus_path="path to colletion.tsv"
+train_path="path to training dataset"
 
-model_name_or_path="/projects/bcgk/zwang48/sclr/checkpoints/mntp/llama3-1b-msmarco/bimodel_sparse"
+model_name_or_path="path to pretrained model"
 
 echo $teacher_score_path
 
@@ -93,7 +64,7 @@ for (( i=0; i<${#list_of_tuples[@]}; i+=4 )); do
 
     read query_reg doc_reg <<< $(extract_task_weights "$task_weights")
     run_name=llama3-1b-marco-mntp-sparse-nce-lora-lmhead1-${lr}_qreg_${query_reg}_dreg_${doc_reg}_bs_${batch_size}_epochs_${epochs}_nnegs_${n_negs}
-    output_dir=/work/hdd/bcgk/zwang48/model_sclr_ckpts/multickpt/$run_name
+    output_dir=./checkpoints/$run_name
 
     torchrun --nproc_per_node=$NGPU --master_port 4426 -m train_sparse \
             --max_steps=$max_steps \
@@ -117,9 +88,9 @@ for (( i=0; i<${#list_of_tuples[@]}; i+=4 )); do
             --save_steps $save_steps \
             --save_total_limit=1 \
             --fsdp "full_shard auto_wrap" \
-            --train_config /u/zwang48/scaling-retriever/train_configs/llama_config.json \
+            --train_config train_configs/llama_config.json \
             --gradient_checkpointing \
-            --fsdp_config /u/zwang48/scaling-retriever/train_configs/fsdp_llama_config.json \
+            --fsdp_config train_configs/fsdp_llama_config.json \
             --lora \
             --lora_lm_head_r 1 \
             --model_type llama \

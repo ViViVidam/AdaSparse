@@ -1,35 +1,6 @@
 #!/bin/bash
-#SBATCH -A bgca-dtai-gh
-#SBATCH --job-name="eval BEIR"
-#SBATCH --output="./output/eval-beir-sparse/d-1B-%j.out"
-#SBATCH --error="./output/eval-beir-sparse/d-1B-%j.err"
-#SBATCH --partition=ghx4
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=32
-#SBATCH --no-requeue
-#SBATCH --gpus=1
-#SBATCH --mem=196G
-#SBATCH -t 6:00:00
 
 # subsets like "arguana" requires bigger memory to avoid performance issues
-module purge
-module load default
-module load cuda/12.6.1
-module load gcc/11.4.0
-# load conda env variables
-# loading the profile of user zwang48 to inject require functions
-__conda_setup="$('/u/yzound/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/u/yzound/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/u/yzound/miniconda3/profile.d/conda.sh"
-    else
-        export PATH="/u/yzound/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-conda activate sl
 
 # CHANGE THIS
 model_name_or_path=/projects/bcgk/yzound/checkpoint/lion/llama3-1b-0.408/

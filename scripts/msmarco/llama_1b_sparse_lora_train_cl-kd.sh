@@ -1,37 +1,5 @@
 #!/bin/bash
-#SBATCH -A bgca-dtai-gh
-#SBATCH --job-name="CL+KD sparse fine-tuning on llama 3.2 1B"
-#SBATCH --output="./output/finetune-sparse-clkd/unofficial-original-1B-nolimit-%j.out"
-#SBATCH --error="./output/finetune-sparse-clkd/unofficial-original-1B-nolimit-%j.err"
-#SBATCH --partition=ghx4
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=32
-#SBATCH --no-requeue
-#SBATCH --gpus=4
-#SBATCH --mem=160G
-#SBATCH -t 12:00:00
 
-#module purge
-module purge
-module load default
-module load cuda/12.6.1
-module load gcc/11.4.0 
-
-# load conda env variables
-# loading the profile of user zwang48 to inject require functions
-__conda_setup="$('/u/yzound/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/u/yzound/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/u/yzound/miniconda3/profile.d/conda.sh"
-    else
-        export PATH="/u/yzound/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-conda activate sl
 
 extract_task_weights() {
     local task_weights=$1
@@ -48,11 +16,11 @@ extract_task_weights() {
 }
 
 # train 
-corpus_path=/projects/bcgk/zwang48/sclr/msmarco-full/collection.tsv
+corpus_path="path to colletion.tsv"
 # BM25 negs train_path=/projects/bcgk/zwang48/sclr/msmarco-full/teacher/train-with-teacher.jsonl
-train_path=/projects/bcgk/yzound/datasets/msmarco/msmarco_train_teacher_scores.jsonl #/projects/bcgk/zwang48/sclr/msmarco-full/teacher/train-tevatron-negs-teacher.jsonl
+train_path="path to training dataset" #/projects/bcgk/zwang48/sclr/msmarco-full/teacher/train-tevatron-negs-teacher.jsonl
 
-model_name_or_path="/projects/bcgk/yzound/checkpoint/lion/mntp/llama3-1b-msmarco/bimodel_sparse"
+model_name_or_path="path to pretrained model"
 
 echo $teacher_score_path
 
@@ -96,8 +64,7 @@ for (( i=0; i<${#list_of_tuples[@]}; i+=i+=${#list_of_tuples[@]} )); do
 
     read query_reg doc_reg <<< $(extract_task_weights "$task_weights")
     run_name=llama3-1b-marco-mntp-sparse-nolimit-nce-kldiv-negs-Tevatron-flops-lora-${lr}_qreg_${query_reg}_dreg_${doc_reg}_bs_${batch_size}_epochs_${epochs}_nnegs_${n_negs}
-    # output_dir=/projects/bcgk/zwang48/sclr/checkpoints/$run_name
-    output_dir=/projects/bfqn/yzound/checkpoint/lion/$run_name
+    output_dir=./checkpoints/$run_name
 
     torchrun --nproc_per_node=$NGPU --master_port 4426 -m train_sparse \
             --max_steps=$max_steps \
@@ -121,8 +88,8 @@ for (( i=0; i<${#list_of_tuples[@]}; i+=i+=${#list_of_tuples[@]} )); do
             --save_steps $save_steps \
             --save_total_limit=2 \
             --fsdp "full_shard auto_wrap" \
-            --train_config /u/yzound/lion/train_configs/llama_config.json \
-            --fsdp_config /u/yzound/lion/train_configs/fsdp_llama_config.json  \
+            --train_config train_configs/llama_config.json \
+            --fsdp_config train_configs/fsdp_llama_config.json  \
             --lora \
             --gradient_checkpointing \
             --model_type llama \
