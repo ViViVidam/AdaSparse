@@ -20,7 +20,7 @@ if [ $task_name = index_and_retrieval ]; then
     echo $model_name_or_path
     # Keep the file-name suffixes below: the branches in the loop match on them.
     query_paths=(
-        "path to queries.small.dev.tsv"
+        "path to queries.cleaned.dev.tsv"
         "path to msmarco-test2019-queries.tsv"
         "path to msmarco-test2020-queries.tsv"
     )

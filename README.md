@@ -64,10 +64,15 @@ Training and evaluation data for MS MARCO can be downloaded from the
 [MSMARCO Evaluation and Training Data](https://drive.google.com/drive/folders/1IkWi7ZB7iRuUuzmwS1tOX9wOCWy8KdnA?usp=drive_link) folder.
 BEIR subsets are downloaded automatically at indexing time.
 
-Each training script begins with `corpus_path`, `train_path`, and `model_name_or_path` set to
-placeholder strings — fill these in before running. Checkpoints are written to `./checkpoints/<run_name>`.
-The indexing and evaluation scripts still carry example index and output directories, so edit those
-to match your setup. Retrieval on custom query/corpus files also requires registering the paths in `constants.py`.
+The training scripts, `scripts/eval_sparse.sh`, and `scripts/encode_sparse_query.sh` open with a block of
+`"path to ..."` placeholders — fill these in before running. Training checkpoints are written to
+`./checkpoints/<run_name>`. In the query path lists, keep the file-name suffixes (`.dev.tsv`,
+`2019-queries.tsv`, `2020-queries.tsv`): the scripts detect the dataset by matching on them.
+
+The remaining scripts (indexing, index merging, BEIR, and the LoRA rewrite helpers), along with the
+MNTP configs in `train_configs/mntp/` and the helpers under `analysis/` and `preprocess/`, still contain
+absolute paths from the machine they were developed on. Treat those as examples and edit them to match
+your setup. Retrieval on custom query/corpus files also requires registering the paths in `constants.py`.
 
 ## Training
 
@@ -88,7 +93,7 @@ Key AdaSparse arguments (`--loss_type=adasparse`):
 - `--lexical_preserve`: the lexical provenance bias `β` that exempts original-text terms from the gating penalty (paper default: `β=2`)
 - `--thresh`: enable PTT, per-term thresholding — one learnable threshold per vocabulary term (`τ_j` in the paper), saved with the adapter
 
-Baseline loss types are also supported: `nce` (CL), `margin_mse` (KD), `nce_kldiv` (CL+KD), via `scripts/msmarco/llama_{1b,3b,8b}_sparse_lora_train_{cl,kd,cl-kd}.sh`.
+Baseline loss types are also supported: `nce` (CL), `margin_mse` (KD), `nce_kldiv` (CL+KD), via `scripts/msmarco/llama_{1b,8b}_sparse_lora_train_{cl,kd,cl-kd}.sh`.
 
 ## Indexing and Evaluation
 
