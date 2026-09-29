@@ -63,7 +63,7 @@ The training scripts, `scripts/eval_sparse.sh`, and `scripts/encode_sparse_query
 `"path to ..."` placeholders — fill these in before running. In the query path lists, keep the file-name suffixes (`.dev.tsv`,
 `2019-queries.tsv`, `2020-queries.tsv`): the scripts detect the dataset by matching on them.
 
-Retrieval on custom query/corpus files also requires registering the paths in `constants.py`.
+Retrieval on custom query/corpus files also requires registering the paths in `constants.py`. The file contains examples showing how to register the paths.
 
 ## Training
 

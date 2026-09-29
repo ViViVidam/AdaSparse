@@ -1,8 +1,6 @@
 
 query_path_datasource = {
-    "/work/hzeng_umass_edu/ir-research/PAG/data/msmarco/train_queries/labeled_queries/raw.tsv": "msmarco",
-    "/projects/bcgk/zwang48/sclr/msmarco-full/dev_queries/queries.dev.tsv": "msmarco",
-    "/projects/bcgk/yzound/datasets/msmarco/queries.small.dev.tsv": "msmarco",
+    "/projects/bcgk/yzound/datasets/msmarco/queries.cleaned.dev.tsv": "msmarco",
     "/projects/bcgk/zwang48/sclr/msmarco-full/DL_2019/msmarco-test2019-queries.tsv": "msmarco",
     "/projects/bcgk/zwang48/sclr/msmarco-full/DL_2020/msmarco-test2020-queries.tsv": "msmarco",
 }
