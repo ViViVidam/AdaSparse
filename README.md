@@ -65,14 +65,10 @@ Training and evaluation data for MS MARCO can be downloaded from the
 BEIR subsets are downloaded automatically at indexing time.
 
 The training scripts, `scripts/eval_sparse.sh`, and `scripts/encode_sparse_query.sh` open with a block of
-`"path to ..."` placeholders — fill these in before running. Training checkpoints are written to
-`./checkpoints/<run_name>`. In the query path lists, keep the file-name suffixes (`.dev.tsv`,
+`"path to ..."` placeholders — fill these in before running. In the query path lists, keep the file-name suffixes (`.dev.tsv`,
 `2019-queries.tsv`, `2020-queries.tsv`): the scripts detect the dataset by matching on them.
 
-The remaining scripts (indexing, index merging, BEIR, and the LoRA rewrite helpers), along with the
-MNTP configs in `train_configs/mntp/` and the helpers under `analysis/` and `preprocess/`, still contain
-absolute paths from the machine they were developed on. Treat those as examples and edit them to match
-your setup. Retrieval on custom query/corpus files also requires registering the paths in `constants.py`.
+Retrieval on custom query/corpus files also requires registering the paths in `constants.py`.
 
 ## Training
 
