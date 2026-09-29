@@ -26,11 +26,6 @@ pip install -r requirements.txt
 conda install -c pytorch faiss-cpu=1.8.0
 ```
 
-Every `.sh` file in this repository is a plain bash script. Run them with `bash` from the
-repository root, with your Python environment already active and a working CUDA
-toolchain on the path. They do not activate an environment or request resources
-for you, so adapt them to your own scheduler if you submit them as batch jobs.
-
 ## Quick Start
 
 ```python
