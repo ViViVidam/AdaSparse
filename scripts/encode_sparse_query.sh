@@ -7,11 +7,11 @@ out_base="path to query encoding output directory"
 
 if [ $task_name = index_and_retrieval ]; then
     # CHANGE HERE
-    model_name_or_path=hzeng/Lion-SP-8B-llama3-marco-mntp
+    model_name_or_path=Johonson/adasparse-1B
     echo $model_name_or_path
     # Keep the file-name suffixes below: the branches in the loop match on them.
     query_paths=(
-        "path to queries.small.dev.tsv"
+        "path to queries.cleaned.dev.tsv"
         "path to msmarco-test2019-queries.tsv"
         "path to msmarco-test2020-queries.tsv"
     )

@@ -1,8 +1,8 @@
 {
     "model_name_or_path": "meta-llama/Meta-Llama-3-8B",
-    "train_file":  "path to collection",
+    "train_file": "path to collection",
     "validation_file": "path to validation",
-    "cache_dir": "/work/yyy/.cache",
+    "cache_dir": "",
     "per_device_train_batch_size": 32,
     "per_device_eval_batch_size": 32,
     "gradient_accumulation_steps": 1,

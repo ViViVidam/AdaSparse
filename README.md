@@ -17,7 +17,7 @@ This repository contains the full pipeline: MNTP pre-training, bi-directional co
 | AdaSparse-1B | meta-llama/Llama-3.2-1B | [Johonson/adasparse-1B](https://huggingface.co/Johonson/adasparse-1B) |
 | AdaSparse-8B | meta-llama/Meta-Llama-3-8B | [Johonson/adasparse-8B](https://huggingface.co/Johonson/adasparse-8B) |
 
-The base models are gated on HuggingFace — request access on their model pages first.
+The base models are gated on HuggingFace — request access on their model pages first. The pretrained bidirectional models are also provided in the data link below.
 
 ## Environment Setup
 
@@ -25,6 +25,8 @@ The base models are gated on HuggingFace — request access on their model pages
 pip install -r requirements.txt
 conda install -c pytorch faiss-cpu=1.8.0
 ```
+
+Training requires wandb. Register an account, or set `WANDB_MODE=disabled` to turn logging off.
 
 ## Quick Start
 
@@ -57,7 +59,9 @@ print(scores.tolist())
 
 Training and evaluation data for MS MARCO can be downloaded from the
 [MSMARCO Evaluation and Training Data](https://drive.google.com/drive/folders/1IkWi7ZB7iRuUuzmwS1tOX9wOCWy8KdnA?usp=drive_link) folder.
-BEIR subsets are downloaded automatically at indexing time.
+BEIR subsets are downloaded automatically at indexing time: the `beir` package fetches each subset as a zip
+from the official UKP Darmstadt distribution (not from HuggingFace) and unpacks it under `./data/beir_dataset`,
+which the `beir_dataset_root` variable in the two BEIR scripts controls. Subsets already present are not re-downloaded.
 
 The training scripts, `scripts/eval_sparse.sh`, and `scripts/encode_sparse_query.sh` open with a block of
 `"path to ..."` placeholders — fill these in before running. In the query path lists, keep the file-name suffixes (`.dev.tsv`,

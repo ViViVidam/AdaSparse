@@ -16,11 +16,10 @@ extract_task_weights() {
 }
 
 # train 
-corpus_path="path to colletion.tsv"
-# BM25 negs train_path=/projects/bcgk/zwang48/sclr/msmarco-full/teacher/train-with-teacher.jsonl
-train_path="path to training dataset" #/projects/bcgk/zwang48/sclr/msmarco-full/teacher/train-tevatron-negs-teacher.jsonl
+corpus_path="path to collection.tsv"
+train_path="path to training dataset"
 
-model_name_or_path="path to pretrained model"
+model_name_or_path="path to bidirectional model"
 
 echo $teacher_score_path
 

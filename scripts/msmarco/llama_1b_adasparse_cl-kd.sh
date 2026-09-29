@@ -15,9 +15,9 @@ extract_task_weights() {
 }
 
 # train 
-corpus_path="path to colletion.tsv"
+corpus_path="path to collection.tsv"
 train_path="path to training dataset"
-model_name_or_path="path to pretrained model"
+model_name_or_path="path to bidirectional model"
 
 echo $teacher_score_path
 
